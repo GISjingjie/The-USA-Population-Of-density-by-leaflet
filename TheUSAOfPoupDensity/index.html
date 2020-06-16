@@ -53,9 +53,8 @@
 		</div>
 	</body>
 	<script>
-		var usmap=L.map('madmap').setView([37.8,-96],4);
-		//						setView([纬度,经度],缩放等级)
-		L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token={accessToken}', {
+		//创建两个对象，一个授权卫星图，一个授权街道图
+		var sateMap=L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token={accessToken}', {
 		    attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, <a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
 		    maxZoom: 18,
 		    id: 'mapbox/satellite-v9',
@@ -64,7 +63,32 @@
 		    zoomOffset: -1,
 		    accessToken: 'pk.eyJ1IjoidGltbWFwY2F0IiwiYSI6ImNrYmc4Yjk4MjA1cGsycnF6bHBrd3M5M3kifQ.9UkvAPAAi83S1AuviwAkeQ',
 			//这个是mapbox的权限
-		}).addTo(usmap);
+		});
+		
+		var streetMap=L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token={accessToken}', {
+		    attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, <a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
+		    maxZoom: 18,
+		    //id: 'mapbox/satellite-v9',
+			id:'mapbox/streets-v11',
+		    tileSize: 512,
+		    zoomOffset: -1,
+		    accessToken: 'pk.eyJ1IjoidGltbWFwY2F0IiwiYSI6ImNrYmc4Yjk4MjA1cGsycnF6bHBrd3M5M3kifQ.9UkvAPAAi83S1AuviwAkeQ',
+			//这个是mapbox的权限
+		});
+		
+		
+		
+		var usmap=L.map('madmap',{
+			center:[37.8,-96],
+			zoom:4,
+			layers:[sateMap]
+		});
+		var baseMaps={
+			"<span style='color:red'>卫星图</span>":sateMap,
+			"街道图":streetMap
+		};
+		L.control.layers(baseMaps).addTo(usmap);
+		
 		//分层设色
 		function getColor(d){
 			return d>1000?'#800026':
@@ -134,7 +158,7 @@
 		info.update=function(props){
 			this._div.innerHTML='<h3>美国佬的人口密度情况</h3>'+(props?
 			'<b>'+props.name+'</b><br/>'+props.density+' people / mi<sup>2</sup>'
-			: '鼠标放在某个州上');
+			: '鼠标放在某个州上显示人口密度');
 		};
 		info.addTo(usmap);
 		
@@ -154,18 +178,8 @@
 		// 	return div;
 		// };
 		// legend.addTo(usmap);
-		//*****
-		/*
-		<style>
-		    .info.legend{
-		        background-color: white;
-		        padding: 5px;
-		    }
-		    .info.legend .color{
-		        display: inline-block;
-		        width: 10px;height: 10px;
-		    }
-		</style>*/
+		
+		//图例
 		
 		var legend = L.control({position: 'bottomright'});
 		legend.onAdd = function (usmap) {
