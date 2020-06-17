@@ -207,7 +207,7 @@
 			jwd=jwd.split(',');
 			jwd[0]=jwd[0]*1.0;
 			jwd[1]=jwd[1]*1.0;
-			// console.log(jwd);
+			//南北纬度
 			if(jwd[0]>=0)
 			{
 				jwd[0]='北纬：'+jwd[0].toFixed(4);
@@ -215,12 +215,34 @@
 				jwd[0]*=-1;
 				jwd[0]='南纬：'+jwd[0].toFixed(4);
 			}
+			//东西经问题解决，因为存在超过±180度的情况
 			if(jwd[1]>=0)
 			{
-				jwd[1]='东经：'+jwd[1].toFixed(4);
+				let es=jwd[1]/180;
+				es=parseInt(es);
+				jwd[1]%=180;
+				if(es%2!==0)
+				{
+					jwd[1]=180-jwd[1];
+					jwd[1]='西经：'+jwd[1].toFixed(4);
+					
+				}else{
+					jwd[1]='东经：'+jwd[1].toFixed(4);
+				}
+				
 			}else{
+				let es=jwd[1]/180;
+				es=parseInt(es);
+				jwd[1]%=180;
 				jwd[1]*=-1;
-				jwd[1]='西经：'+jwd[1].toFixed(4);
+				if(es%2!=0)
+				{
+					jwd[1]=180-jwd[1];
+					jwd[1]='东经：'+jwd[1].toFixed(4);
+				}else{
+					
+					jwd[1]='西经：'+jwd[1].toFixed(4);
+				}
 			}
 			popup
 			.setLatLng(e.latlng)
