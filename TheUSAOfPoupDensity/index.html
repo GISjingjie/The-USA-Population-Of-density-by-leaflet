@@ -197,5 +197,35 @@
 		};
 		legend.addTo(usmap);
 		
+		//添加鼠标点击显示经纬度
+		var popup=L.popup();
+		function onMapClick(e){
+			let str=e.latlng.toString().split('g');
+			//用字符串分割分别获取经纬度
+			let jwd=str[1].replace('(','');
+			jwd=jwd.replace(')','');
+			jwd=jwd.split(',');
+			jwd[0]=jwd[0]*1.0;
+			jwd[1]=jwd[0]*1.0;
+			// console.log(jwd);
+			if(jwd[0]>=0)
+			{
+				jwd[0]='北纬：'+jwd[0].toFixed(4);
+			}else{
+				jwd[0]='南纬：'+jwd[0].toFixed(4);
+			}
+			if(jwd[1]>=0)
+			{
+				jwd[1]='东经：'+jwd[1].toFixed(4);
+			}else{
+				jwd[1]='西经：'+jwd[1].toFixed(4);
+			}
+			popup
+			.setLatLng(e.latlng)
+			.setContent("你点的坐标经纬度是："+jwd[0]+' '+jwd[1])
+			.openOn(usmap);
+		}
+		usmap.on('click',onMapClick);
+		
 	</script>
 </html>
