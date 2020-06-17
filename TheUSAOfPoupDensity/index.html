@@ -206,18 +206,20 @@
 			jwd=jwd.replace(')','');
 			jwd=jwd.split(',');
 			jwd[0]=jwd[0]*1.0;
-			jwd[1]=jwd[0]*1.0;
+			jwd[1]=jwd[1]*1.0;
 			// console.log(jwd);
 			if(jwd[0]>=0)
 			{
 				jwd[0]='北纬：'+jwd[0].toFixed(4);
 			}else{
+				jwd[0]*=-1;
 				jwd[0]='南纬：'+jwd[0].toFixed(4);
 			}
 			if(jwd[1]>=0)
 			{
 				jwd[1]='东经：'+jwd[1].toFixed(4);
 			}else{
+				jwd[1]*=-1;
 				jwd[1]='西经：'+jwd[1].toFixed(4);
 			}
 			popup
